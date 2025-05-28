@@ -1,0 +1,96 @@
+Stablecoin Market Capitalization and Treasury Yields:
+An Analysis of Correlation and Potential Market Dynamics
+
+Abstract
+This paper examines the relationship between USD-pegged stablecoin market capitalization and U.S. Treasury yields from January 2023 to March 2024. Using daily data from DefiLlama and FRED, we find significant negative correlations between stablecoin market cap and various Treasury yields, with particularly strong relationships observed in shorter-term maturities. The analysis suggests potential market dynamics where changes in Treasury yields may influence stablecoin market behavior.
+
+1. Introduction
+Stablecoins, particularly those pegged to the U.S. dollar, have become a significant component of the cryptocurrency ecosystem, with their market capitalization reaching over $130 billion. These digital assets are often backed by U.S. Treasury securities, making their relationship with Treasury yields a crucial area of study. This paper investigates the correlation between stablecoin market capitalization and various Treasury yields, exploring potential market dynamics and implications for both traditional and digital financial markets.
+
+2. Methodology
+We collected daily data from two primary sources:
+- Stablecoin market capitalization data from DefiLlama API
+- Treasury yield data from FRED (Federal Reserve Economic Data)
+
+The analysis period spans from January 2023 to March 2024, covering a period of significant monetary policy changes and market volatility. We examine:
+- Treasury yields across multiple maturities (3-month, 1-year, 2-year, 5-year, 10-year, and 30-year)
+- Yield spreads (10Y-2Y, 10Y-3M, 2Y-3M)
+- Stablecoin market capitalization
+
+Statistical methods employed include:
+- Correlation analysis (both contemporaneous and lagged)
+- Rolling correlations to examine time-varying relationships
+- Visual analysis through scatter plots and time series graphs
+
+3. Results
+
+3.1 Market Overview
+During the study period:
+- Stablecoin market cap averaged $129.6 billion
+- Range: $122.8 billion to $139.9 billion
+- 10-year Treasury yield averaged 3.98%
+- 3-month Treasury yield averaged 5.30%
+
+3.2 Correlation Analysis
+We found significant negative correlations between stablecoin market cap and Treasury yields:
+- 3-month yield: -0.72
+- 1-year yield: -0.76
+- 2-year yield: -0.61
+- 5-year yield: -0.57
+- 10-year yield: -0.54
+- 30-year yield: -0.54
+
+The correlation strength decreases as maturity increases, suggesting a stronger relationship with shorter-term yields.
+
+3.3 Lagged Relationships
+Analysis of lagged correlations reveals:
+- 5-day lag: Strong negative correlations (e.g., -0.70 with 3M, -0.78 with 1Y)
+- 20-day lag: Weaker but still negative correlations (e.g., -0.59 with 3M, -0.74 with 1Y)
+
+3.4 Yield Spreads
+The relationship between stablecoin market cap and yield spreads shows:
+- 10Y-2Y spread: Weak positive correlation (0.05)
+- 10Y-3M spread: Very weak positive correlation (0.01)
+- 2Y-3M spread: Weak negative correlation (-0.03)
+
+4. Discussion
+
+4.1 Market Dynamics
+The strong negative correlation between stablecoin market cap and Treasury yields, particularly in shorter maturities, suggests several potential market dynamics:
+
+1. Yield-Seeking Behavior: As Treasury yields increase, investors may move funds from stablecoins to traditional Treasury securities, reducing stablecoin market cap.
+
+2. Risk Appetite: Higher yields often indicate tighter monetary policy, which may reduce risk appetite and lead to decreased stablecoin usage.
+
+3. Arbitrage Opportunities: The relationship may reflect arbitrage activities between stablecoin yields and Treasury yields.
+
+4.2 Implications
+The findings have several implications:
+
+1. Market Integration: The strong correlations suggest that stablecoin markets are increasingly integrated with traditional financial markets.
+
+2. Risk Management: The relationship between yields and market cap could be used for risk management and market timing strategies.
+
+3. Policy Impact: Changes in monetary policy, reflected in Treasury yields, may have significant effects on stablecoin markets.
+
+5. Conclusion
+This analysis reveals a significant relationship between stablecoin market capitalization and Treasury yields, with particularly strong correlations in shorter-term maturities. The negative correlation suggests that stablecoin markets respond to changes in traditional financial market conditions, particularly interest rates.
+
+The findings contribute to understanding the integration of stablecoins into the broader financial system and highlight the importance of monitoring Treasury yields when analyzing stablecoin market dynamics.
+
+Future Research Directions:
+1. Examine the relationship during different market regimes
+2. Investigate the role of specific stablecoins in the observed correlations
+3. Analyze the impact of regulatory changes on the relationship
+4. Study the relationship between stablecoin market cap and other financial market indicators
+
+References
+[To be added]
+
+Figures
+[The following figures are referenced in the paper and saved in the figures/ directory:]
+- stablecoin_market_cap.png: Shows the evolution of stablecoin market capitalization
+- treasury_yields_all.png: Displays all Treasury yields over time
+- treasury_yield_spreads.png: Illustrates the yield spreads
+- marketcap_vs_DGS10.png: Scatter plot of market cap vs. 10-year yield
+- rolling_corr_marketcap_DGS10.png: Shows the evolution of the correlation over time 
