@@ -1,0 +1,131 @@
+You are my coding + research copilot for the project:
+
+────────────────────────────────────────
+Stablecoin-Reserve Shock-Waves
+in the $29 T U.S. Treasury Market
+────────────────────────────────────────
+
+GOAL
+=====
+Quantify how changes in the market cap (and thus reserve composition) of major USD-pegged stablecoins ripple into short-tenor Treasury yields—specifically the 3-month vs 1-year T-bill spread—via two complementary lenses:
+
+  1. **Macro lens:** Vector-Autoregression (VAR) at daily frequency, 2018-01-01 → present.
+  2. **Micro lens:** High-frequency event study around ≥ $500 M mint/burn transactions (Tether, USDC, DAI, FDUSD, USDe, etc.) at block-level resolution.
+
+The deliverable is a publish-quality research article (≈5 000–7 000 words) + reproducible Python repo.
+
+REPO SKELETON (already created)
+================================
+.
+├── data/
+│   ├── raw/                # untouched pulls
+│   ├── interim/            # after minimal cleaning
+│   └── processed/          # analysis-ready parquet or feather
+├── notebooks/
+│   ├── 00_eda.ipynb
+│   ├── 01_var_spec.ipynb
+│   └── 02_event_study.ipynb
+├── scripts/
+│   ├── ingest/
+│   │   ├── fetch_stablecoin_caps.py
+│   │   ├── fetch_treasury_yields.py
+│   │   └── parse_attestations.py
+│   └── utils/
+│       ├── io.py
+│       └── fred_api.py
+├── tests/
+│   └── …                    # pytest unit tests
+├── requirements.txt
+├── Makefile                 # main make targets: ingest, clean, test, paper
+└── paper/
+    ├── main.tex             # LaTeX skeleton with \input{tables/…}
+    └── bib/refs.bib
+
+DATA SOURCES
+============
+• **Stablecoin market caps** – DefiLlama API (“stablecoins?includePrices=true”).  
+  Keys: symbol, circulatingSupply, chain, timestamp.
+
+• **Mint/Burn events** – Token smart-contracts via web3.py + project-specific ABIs.  
+  Log signature: `Transfer(address(0), to, amount)` (mint) and vice-versa.  
+  Threshold for event study: |amount| ≥ $500 M.
+
+• **Reserve attestations** – PDFs from Circle, Tether, Paxos; scrape/parse monthly tables into `data/raw/attestations/`.
+
+• **Treasury yields** – FRED series DGS3 & DGS1.  
+  Helper in `scripts/utils/fred_api.py`.
+
+• **Macro controls** (optional) – Fed balance-sheet (WALCL), VIX, BTC price.
+
+METHODOLOGY SNAPSHOT
+====================
+1. **Panel Creation**
+   a. Daily stablecoin cap matrix (tokens × time).  
+   b. Daily 3 m & 1 y T-bill yields → spread `spread_t = DGS3 – DGS1`.  
+   c. Merge; forward-fill weekends/holidays.
+
+2. **VAR**
+   • Optimal lag via AIC/BIC (expect 1–3).  
+   • Check stationarity (ADF test) or use Δlog levels.  
+   • Impulse-response functions: 1 σ shock to log-mcap → bp change in spread.
+
+3. **Event Study**
+   • Window: [-5 d, +10 d] around timestamp 0 (mint/burn).  
+   • Abnormal yield change = Δspread – expected Δspread from rolling AR(1).  
+   • Clinton-Montgomery t-stats with Newey-West SE.
+
+WHAT I NEED YOU (Cursor) TO DO NEXT
+===================================
+**A. Code tasks (top priority)**
+1. Finish `scripts/ingest/fetch_stablecoin_caps.py`  
+   • Use DefiLlama endpoint with pagination handling.  
+   • Save gzipped parquet to `data/raw/stablecoin_caps.parq`.  
+   • Add `if __name__ == "__main__":` → CLI flags (`--token`, `--start`, `--end`).  
+   • 95 % test-coverage; mock API for tests.
+
+2. Scaffold `scripts/ingest/fetch_treasury_yields.py` with FRED key pulled from `.env`.
+
+3. Write first draft of `00_eda.ipynb`  
+   • Load both datasets.  
+   • Plot (matplotlib) total stablecoin cap vs spread.  
+   • Summary table: mean, σ, skew, kurtosis.
+
+**B. Research helper tasks**
+4. Generate a BibTeX entry for Kunz & Leroux (2024) “Stablecoin Demand and T-Bill Liquidity”.  
+5. Draft 3–4 bullet-point hypotheses for Discussion section.
+
+**C. Quality gates**
+6. Every function must have Google-style docstrings + type hints.  
+7. Use `pre-commit` (black, isort, flake8, mypy).  
+8. Push green CI on GitHub Actions (pytest + mypy).
+
+CODING CONVENTIONS
+==================
+* Python ≥ 3.11, PEP 8, black.  
+* Use `pandas >= 3`, `polars` allowed for large transforms.  
+* Keep all secrets in `.env` (dotenv-load only inside entry-points).  
+* Use `logging` (not `print`) for runtime info.  
+* Never hard-code API URLs—store in `config.py`.
+
+UNIT-TEST STRATEGY
+==================
+• Put tests alongside source with identical names (`tests/test_fetch_stablecoin_caps.py`).  
+• Mock web calls with `responses` or `pytest-httpx`.  
+• Threshold: > 90 % lines, > 80 % branches.
+
+TIMELINE SNAPSHOT
+=================
+Week 1  ingest scripts + EDA  
+Week 2  merged panel, VAR baseline  
+Week 3  refine VAR, robustness (lags, exogenous BTC)  
+Week 4  event-study code + first results  
+Week 5  paper draft (Intro, Data, Method)  
+Week 6  finalize figures/tables, polish Discussion, Abstract  
+Week 7  peer review  
+Week 8  submission
+
+✦✦✦
+Cursor, whenever you encounter a TODO comment, auto-expand it into idiomatic, tested code following the above rules.  
+When you write SQL-like queries for DefiLlama or dune-api, parametrize dates & addresses.  
+Review all PRs for docstring completeness and run `make test` before merging.
+✦✦✦

@@ -1,0 +1,68 @@
+Summary Statistics (all yields and spreads):
+
+       circulating_supply_usd      DGS3MO        DGS1  ...      10Y-2Y      10Y-3M       2Y-3M
+count            2.910000e+02  291.000000  291.000000  ...  291.000000  291.000000  291.000000
+mean             1.295821e+11    5.302577    5.049759  ...   -0.578282   -1.319347   -0.741065
+std              4.645862e+09    0.306107    0.310982  ...    0.229938    0.287922    0.301398
+min              1.227755e+11    4.520000    4.190000  ...   -1.080000   -1.890000   -1.510000
+25%              1.250995e+11    5.120000    4.795000  ...   -0.760000   -1.560000   -1.000000
+50%              1.291717e+11    5.440000    5.050000  ...   -0.580000   -1.310000   -0.700000
+75%              1.339328e+11    5.535000    5.360000  ...   -0.390000   -1.120000   -0.560000
+max              1.399802e+11    5.630000    5.490000  ...   -0.130000   -0.620000   -0.010000
+
+[8 rows x 10 columns]
+
+
+Correlation Matrix (all yields and spreads):
+
+                        circulating_supply_usd    DGS3MO      DGS1  ...    10Y-2Y    10Y-3M     2Y-3M
+circulating_supply_usd                1.000000 -0.719287 -0.758656  ...  0.052556  0.010813 -0.029765
+DGS3MO                               -0.719287  1.000000  0.726974  ...  0.228412 -0.073864 -0.244818
+DGS1                                 -0.758656  0.726974  1.000000  ... -0.253291  0.236051  0.418734
+DGS2                                 -0.613815  0.622305  0.934150  ... -0.166932  0.501680  0.606603
+DGS5                                 -0.570286  0.661419  0.827500  ...  0.168911  0.650394  0.492451
+DGS10                                -0.536691  0.704263  0.718248  ...  0.414436  0.655981  0.310476
+DGS30                                -0.538982  0.729809  0.645013  ...  0.545168  0.602359  0.159516
+10Y-2Y                                0.052556  0.228412 -0.253291  ...  1.000000  0.339330 -0.438748
+10Y-3M                                0.010813 -0.073864  0.236051  ...  0.339330  1.000000  0.696414
+2Y-3M                                -0.029765 -0.244818  0.418734  ... -0.438748  0.696414  1.000000
+
+[10 rows x 10 columns]
+
+
+Lagged Correlations (Stablecoin Market Cap vs. Yields/Spreads):
+
+  5-day lag: circulating_supply_usd vs. DGS3MO: -0.700
+  20-day lag: circulating_supply_usd vs. DGS3MO: -0.592
+  5-day lag: circulating_supply_usd vs. DGS1: -0.777
+  20-day lag: circulating_supply_usd vs. DGS1: -0.743
+  5-day lag: circulating_supply_usd vs. DGS2: -0.629
+  20-day lag: circulating_supply_usd vs. DGS2: -0.592
+  5-day lag: circulating_supply_usd vs. DGS5: -0.566
+  20-day lag: circulating_supply_usd vs. DGS5: -0.476
+  5-day lag: circulating_supply_usd vs. DGS10: -0.513
+  20-day lag: circulating_supply_usd vs. DGS10: -0.372
+  5-day lag: circulating_supply_usd vs. DGS30: -0.506
+  20-day lag: circulating_supply_usd vs. DGS30: -0.354
+  5-day lag: circulating_supply_usd vs. 10Y-2Y: 0.123
+  20-day lag: circulating_supply_usd vs. 10Y-2Y: 0.325
+  5-day lag: circulating_supply_usd vs. 10Y-3M: 0.024
+  20-day lag: circulating_supply_usd vs. 10Y-3M: 0.110
+  5-day lag: circulating_supply_usd vs. 2Y-3M: -0.070
+  20-day lag: circulating_supply_usd vs. 2Y-3M: -0.136
+
+
+Rolling 30-day Correlations (Stablecoin Market Cap vs. Yields/Spreads):
+
+  Saved rolling correlation plot for DGS3MO.
+  Saved rolling correlation plot for DGS1.
+  Saved rolling correlation plot for DGS2.
+  Saved rolling correlation plot for DGS5.
+  Saved rolling correlation plot for DGS10.
+  Saved rolling correlation plot for DGS30.
+  Saved rolling correlation plot for 10Y-2Y.
+  Saved rolling correlation plot for 10Y-3M.
+  Saved rolling correlation plot for 2Y-3M.
+
+
+There is a negative correlation between stablecoin market cap and 10Y Treasury yield.
