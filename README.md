@@ -1,3 +1,7 @@
+
+# Disclaimer
+I'm actually vibe coding this entire thing, just to try and see how good the results will be.
+
 # Stablecoin Reserve Shock
 
 This repository contains code and data for analyzing stablecoin reserve shocks, including data ingestion, exploratory data analysis, VAR modeling, and event studies. It is organized for reproducible research and includes a pipeline from raw data to paper-ready figures and results.
