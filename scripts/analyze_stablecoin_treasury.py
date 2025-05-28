@@ -8,6 +8,11 @@ import os
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from statsmodels.regression.linear_model import OLS
+from statsmodels.tools import add_constant
 
 # Directories and files
 RAW_DIR = Path("data/raw")
@@ -145,6 +150,83 @@ if "DGS10" in df.columns:
         report_lines.append("There is a positive correlation between stablecoin market cap and 10Y Treasury yield.\n")
     else:
         report_lines.append("There is little to no correlation between stablecoin market cap and 10Y Treasury yield.\n")
+
+# === Niche/Nuanced Analyses ===
+
+# 1. Nonlinearity: Quadratic and threshold effects
+for col in ["DGS3MO", "DGS10", "10Y-2Y", "10Y-3M"]:
+    if col in df.columns:
+        x = df[col].values.reshape(-1, 1)
+        y = df["circulating_supply_usd"].values
+        # Linear
+        linreg = LinearRegression().fit(x, y)
+        # Quadratic
+        poly = PolynomialFeatures(degree=2)
+        x2 = poly.fit_transform(x)
+        quadreg = LinearRegression().fit(x2, y)
+        # Piecewise (threshold at median)
+        thresh = np.median(x)
+        x_piece = np.hstack([x, (x > thresh).astype(int)])
+        pwreg = LinearRegression().fit(x_piece, y)
+        # Plot
+        x_plot = np.linspace(x.min(), x.max(), 100).reshape(-1, 1)
+        y_lin = linreg.predict(x_plot)
+        y_quad = quadreg.predict(poly.transform(x_plot))
+        y_pw = pwreg.predict(np.hstack([x_plot, (x_plot > thresh).astype(int)]))
+        plt.figure(figsize=(7, 5))
+        plt.scatter(x, y, alpha=0.3, label="Data")
+        plt.plot(x_plot, y_lin, label="Linear", color="blue")
+        plt.plot(x_plot, y_quad, label="Quadratic", color="red", linestyle="--")
+        plt.plot(x_plot, y_pw, label=f"Piecewise (thresh={thresh:.2f})", color="green", linestyle=":")
+        plt.xlabel(f"{col}")
+        plt.ylabel("Stablecoin Market Cap (USD)")
+        plt.title(f"Nonlinear fits: Market Cap vs {col}")
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(FIG_DIR / f"nonlinear_marketcap_vs_{col}.png")
+        plt.close()
+        # Print R^2
+        print(f"Nonlinearity {col}: Linear R2={linreg.score(x, y):.3f}, Quad R2={quadreg.score(x2, y):.3f}, Piecewise R2={pwreg.score(x_piece, y):.3f}")
+
+# 2. Extreme event responses
+for col in ["DGS3MO", "DGS10", "10Y-2Y", "10Y-3M"]:
+    if col in df.columns:
+        changes = df[col].diff()
+        std = changes.std()
+        extreme_days = changes.abs() > 2 * std
+        cap_changes = df["circulating_supply_usd"].pct_change()
+        cap_changes = cap_changes.replace([np.inf, -np.inf], np.nan)  # Remove inf
+        extreme_cap = cap_changes[extreme_days]
+        normal_cap = cap_changes[~extreme_days]
+        print(f"Extreme event response for {col}: mean cap change on extreme days={extreme_cap.mean():.4f}, normal days={normal_cap.mean():.4f}, n_extreme={extreme_cap.count()}")
+        # Plot
+        plt.figure(figsize=(7, 4))
+        plt.hist(normal_cap.dropna(), bins=30, alpha=0.5, label="Normal")
+        plt.hist(extreme_cap.dropna(), bins=15, alpha=0.7, label="Extreme", color="red")
+        plt.title(f"Stablecoin Cap Change: Extreme vs Normal {col} Moves")
+        plt.xlabel("Daily % Change in Market Cap")
+        plt.ylabel("Frequency")
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(FIG_DIR / f"extreme_event_marketcap_{col}.png")
+        plt.close()
+
+# 3. Idiosyncratic spreads
+spread_defs = {"5Y-2Y": ("DGS5", "DGS2"), "30Y-10Y": ("DGS30", "DGS10"), "5Y-3M": ("DGS5", "DGS3MO")}
+for spread, (long, short) in spread_defs.items():
+    if long in df.columns and short in df.columns:
+        df[spread] = df[long] - df[short]
+        corr = df["circulating_supply_usd"].corr(df[spread])
+        print(f"Idiosyncratic spread {spread}: correlation with market cap = {corr:.3f}")
+        # Plot
+        plt.figure(figsize=(7, 5))
+        plt.scatter(df[spread], df["circulating_supply_usd"], alpha=0.4)
+        plt.xlabel(f"{spread} Spread (%)")
+        plt.ylabel("Stablecoin Market Cap (USD)")
+        plt.title(f"Market Cap vs {spread} Spread")
+        plt.tight_layout()
+        plt.savefig(FIG_DIR / f"marketcap_vs_{spread}.png")
+        plt.close()
 
 # Save report
 with open(REPORT_FILE, "w") as f:
